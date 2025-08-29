@@ -31,6 +31,7 @@ document.getElementById('card-container').addEventListener('click', function(e){
         const card = callButton.closest('.card');
         const serviceName = card.querySelector('.service-name').innerText;
         const serviceNumber = card.querySelector('.service-number').innerText;
+        const serviceSurName = card.querySelector('.service-sur-name').innerText;
 
         // Coin Counter
         const coinCounter = Number(getElement('coin-counter').innerText);
@@ -41,13 +42,14 @@ document.getElementById('card-container').addEventListener('click', function(e){
             alert("⚠️Sorry, you don't have enough coins to make a call.")
             return;
         }
-        alert(`📞 Calling ${serviceName} Service ${serviceNumber}...`)
+        alert(`📞 Calling ${serviceSurName} Service ${serviceNumber}...`);
+
 
         // Call History
         const currentTime = new Date().toLocaleTimeString();
-        const historyItem = document.createElement('div');
+        const callHistory = document.createElement('div');
 
-        historyItem.innerHTML = `
+        callHistory.innerHTML = `
                 <div class="bg-[#FAFAFA] flex items-center p-3.5 rounded-lg justify-between mb-2">
                     <div>
                         <h1 class="text-lg font-medium">${serviceName}</h1>
@@ -59,18 +61,32 @@ document.getElementById('card-container').addEventListener('click', function(e){
                 </div>
             `;
         const historyContainer = getElement('call-history');
-        historyContainer.prepend(historyItem);
+        historyContainer.prepend(callHistory);
 
     }
+
+    // Copy Button 
+        const copyButton = e.target.closest('.copy-btn');
+        if (copyButton) {
+            const serviceNumber = copyButton.parentNode.parentNode.children[2].children[0].textContent;
+            navigator.clipboard.writeText(serviceNumber).then(function(){
+                copyButton.innerText = 'Copied';
+                setTimeout(function(){
+                    copyButton.innerHTML = `<i class="fa-regular fa-copy"></i> Copy` 
+                },2000)
+            })
+
+            const copyContent = Number(getElement('copy-content').innerText);
+            getElement('copy-content').innerText = copyContent + 1;
+            
+        }
     
 
 });
 
 // Clear History Button Functionality
     document.getElementById('clear-btn').addEventListener('click', function() {
-    const historyContainer = getElement('call-history');
-    historyContainer.innerHTML = '';
-    
+    getElement('call-history').innerText = '';
 });
 
 
