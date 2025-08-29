@@ -4,8 +4,9 @@ function getElement(id) {
     return element;
 }
 
-// Heart Icons javaScript Functionality
+//  javaScript Functionality
 document.getElementById('card-container').addEventListener('click', function(e){
+    // Heart Icons
     if (e.target.className.includes('love-icon')) {
         if (e.target.className.includes('text-red-500') === false) {
             e.target.classList.add('text-red-500');
@@ -22,13 +23,14 @@ document.getElementById('card-container').addEventListener('click', function(e){
         }    
     }
 
-    // All Files
-
-    const callButton = e.target.closest('.call-btn')
+    // Call Button Functionality
+    const callButton = e.target.closest('.call-btn');
     if (callButton) {
-        const serviceName = callButton.parentNode.parentNode.children[1].children[1].innerText;
-        const serviceNumber = callButton.parentNode.parentNode.children[2].children[0].innerText;
-        
+
+        // All 
+        const card = callButton.closest('.card');
+        const serviceName = card.querySelector('.service-name').innerText;
+        const serviceNumber = card.querySelector('.service-number').innerText;
 
         // Coin Counter
         const coinCounter = Number(getElement('coin-counter').innerText);
@@ -36,15 +38,39 @@ document.getElementById('card-container').addEventListener('click', function(e){
         if(coinCounter >= 20){
             getElement('coin-counter').innerText = coinCounter - 20;
         }else {
-            alert("Sorry, you don't have enough coins to make a call.")
+            alert("⚠️Sorry, you don't have enough coins to make a call.")
             return;
         }
         alert(`📞 Calling ${serviceName} Service ${serviceNumber}...`)
+
+        // Call History
+        const currentTime = new Date().toLocaleTimeString();
+        const historyItem = document.createElement('div');
+
+        historyItem.innerHTML = `
+                <div class="bg-[#FAFAFA] flex items-center p-3.5 rounded-lg justify-between mb-2">
+                    <div>
+                        <h1 class="text-lg font-medium">${serviceName}</h1>
+                        <p class="text-[#5c5c5c]">${serviceNumber}</p>
+                    </div>
+                    <div>
+                        <p class="text-[#5c5c5c] font-medium">${currentTime}</p>
+                    </div>
+                </div>
+            `;
+        const historyContainer = getElement('call-history');
+        historyContainer.prepend(historyItem);
+
     }
+    
+
+});
+
+// Clear History Button Functionality
+    document.getElementById('clear-btn').addEventListener('click', function() {
+    const historyContainer = getElement('call-history');
+    historyContainer.innerHTML = '';
+    
 });
 
 
-// Call Buttons javaScript Functionality
-// document.getElementById('card-container').addEventListener('click', function(e){
-    
-// })
